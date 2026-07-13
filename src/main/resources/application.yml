@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: library
+  profiles:
+    active: @active-profiles@
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+---
+spring:
+  config.activate.on-profile: default
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    jpa.database-platform: org.hibernate.dialect.H2Dialect
+
+---
+spring:
+  config.activate.on-profile: local-postgres
+  datasource:
+    url: jdbc:postgresql://localhost:5432/library
+    driverClassName: org.postgresql.Driver
+    username: library
+    password: library
+    jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+---
+spring:
+  config.activate.on-profile: prod
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_SERVER}:5432/${POSTGRES_DB}
+    driverClassName: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
